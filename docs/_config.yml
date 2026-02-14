@@ -1,0 +1,9 @@
+title: Energy-Based Cryptanalysis
+theme: just-the-docs
+
+nav:
+  - Home: index.md
+  - Methodology: methodology.md
+  - Side-Channel Analysis: sca.md
+  - Results: results.md
+  - Conclusion: conclusion.md

@@ -1,4 +1,4 @@
-# Project Overview
+<!-- # Project Overview
 
 * We built an Energy Classifier model that can automatically detect which encryption algorithm — AES, DES, Vigenère, or Speck32 — was used just by analyzing the ciphertext.
 
@@ -28,4 +28,41 @@
 
 * The project bridges classical cryptography, modern deep learning, and hardware-level analysis, giving a complete picture of encryption security from multiple perspectives.
 
-* Overall, it connects theory, experimentation, and attack simulation, helping us understand how encryption systems can be analysed, compared, and made more secure in practice.
+* Overall, it connects theory, experimentation, and attack simulation, helping us understand how encryption systems can be analysed, compared, and made more secure in practice. -->
+
+
+## Introduction
+
+Modern cryptography is designed to produce ciphertext that appears statistically random, making it extremely difficult to identify the underlying encryption algorithm without the key. However, different ciphers often leave subtle structural and statistical traces that can be learned by deep learning models.
+
+This project explores whether machine learning — specifically energy-based models, CNNs, and transformers — can:
+
+-  Identify which encryption algorithm generated a ciphertext
+
+-  Learn leakage patterns from side-channel traces
+
+-  Recover or rank secret keys without brute force
+
+We study both algorithm-level security and implementation-level leakage, giving a complete, practical view of cryptanalysis.
+
+
+## Objectives
+
+Build a cipher classifier that predicts
+- AES  
+- DES  
+- Vigenère 
+- Speck32
+using ciphertext only
+
+Implement a Side-Channel Analysis (SCA) model for DES
+
+Generate synthetic leakage data using Hamming Weight for Speck32
+
+Evaluate:
+
+Classification accuracy
+
+Key rank performance
+
+Compare classical vs modern cipher robustness against deep learning
