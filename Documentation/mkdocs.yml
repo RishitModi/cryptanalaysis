@@ -1,0 +1,14 @@
+site_name: Neuro-symbolic Cryptanalysis
+theme: readthedocs
+
+nav:
+  - 'Project Overview': 'project-overview.md'
+  - 'Mini-projects': 'mini-projects.md'
+  - 'Ciphers': 'ciphers.md'
+  - 'Transformers': 'transformers.md'
+  - 'Energy-Transformers': 'energy-transformers.md'
+  - 'Side-Channel Attacks': 'side-channel-attacks.md'
+  - 'CNNs for SCA': 'cnns-for-sca.md'
+  - 'Challenges Faced': 'challenges-faced.md'
+  - 'Future Scope': 'future-scope.md'
+  - 'Conclusion': 'conclusion.md'
