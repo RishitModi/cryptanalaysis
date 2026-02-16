@@ -136,5 +136,5 @@ Generalisation | Cross-device evaluation |
 
 ## Mentors  
 
-- @Afreen-Kazi-1 
-- @Ghruank 
+- [@Afreen Kazi](https://github.com/Afreen-Kazi-1)  
+- [@Ghruank Kothare](https://github.com/Ghruank)
