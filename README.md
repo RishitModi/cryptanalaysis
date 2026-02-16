@@ -1,68 +1,245 @@
-<!-- # Project Overview
 
-* We built an Energy Classifier model that can automatically detect which encryption algorithm — AES, DES, Vigenère, or Speck32 — was used just by analyzing the ciphertext.
-
-* The classifier doesn’t rely on knowing the encryption key; instead, it studies statistical and structural patterns present in the ciphertext to make predictions.
-
-* Our approach focuses on using deep learning to extract hidden representations from encrypted data, helping the model learn how different algorithms leave distinct “signatures.”
-
-* Alongside classification, we explored Side-Channel Analysis (SCA), a practical attack method that uses information like power consumption or electromagnetic leaks to recover secret keys.
-
-* We built a basic SCA model for DES, where the model learns to identify key-related leakage from traces, and tested its ability to recover or rank the correct key.
-
-* Also, generated synthetic data for Speck32 using Hamming weight.
-
-* The project includes the process of generating datasets, training both the classifier and SCA model, and evaluating results using accuracy and key rank metrics.
-
-###
-
-# Why This Matters
-
-* This project helps us understand the real-world security behaviour of classical and modern ciphers when analysed using deep learning and side-channel techniques.
-
-* By combining cipher classification and key recovery attempts, we get insights into how secure each encryption method is.
-
-* It shows that older ciphers like DES and Vigenère are easier to analyze or attack, while modern ones like AES remain highly resistant — even to advanced models.
-
-* We learn how SCA reveals vulnerabilities not through mathematical weakness but through physical leakage, showing a different layer of cryptanalysis.
-
-* The project bridges classical cryptography, modern deep learning, and hardware-level analysis, giving a complete picture of encryption security from multiple perspectives.
-
-* Overall, it connects theory, experimentation, and attack simulation, helping us understand how encryption systems can be analysed, compared, and made more secure in practice. -->
-
+# Energy-Based and Neurosymbolic methods for advanced Cryptanalysis
 
 ## Introduction
 
-Modern cryptography is designed to produce ciphertext that appears statistically random, making it extremely difficult to identify the underlying encryption algorithm without the key. However, different ciphers often leave subtle structural and statistical traces that can be learned by deep learning models.
+Cryptanalysis is the study of analysing cryptographic systems in order to recover secret information without prior knowledge of the key. While modern cryptographic algorithms are mathematically secure against classical attacks, practical implementations often leak information through physical side channels such as power consumption, timing behaviour, and electromagnetic radiation.
 
-This project explores whether machine learning — specifically energy-based models, CNNs, and transformers — can:
+This project investigates cryptanalysis using a multi-layered approach that combines:
 
--  Identify which encryption algorithm generated a ciphertext
+- Classical statistical cryptanalysis
+- Side-channel leakage modelling
+- Deep learning based profiling attacks
+- Energy-based neurosymbolic key ranking
 
--  Learn leakage patterns from side-channel traces
+The objective is to demonstrate how machine learning techniques can exploit statistical dependencies between leakage traces and intermediate cryptographic computations to recover secret keys.
 
--  Recover or rank secret keys without brute force
+---
 
-We study both algorithm-level security and implementation-level leakage, giving a complete, practical view of cryptanalysis.
+Modern block ciphers are designed to resist structural cryptanalysis. However, physical implementations of these algorithms exhibit data-dependent power consumption. This leakage can be modelled and analysed to recover secret keys.
 
+The key challenges addressed in this project are:
 
-## Objectives
+- modelling realistic side-channel leakage
+- learning leakage patterns using neural networks
+- ranking key hypotheses using energy-based scoring
 
-Build a cipher classifier that predicts
-- AES  
-- DES  
-- Vigenère 
-- Speck32
-using ciphertext only
+---
 
-Implement a Side-Channel Analysis (SCA) model for DES
+### Objectives
 
-Generate synthetic leakage data using Hamming Weight for Speck32
+- Implement classical Vigenère cryptanalysis using statistical methods
+- Generate synthetic side-channel traces using the Hamming Weight model
+- Train CNN-based profiling attacks for key recovery
+- Recover DES subkeys using intermediate value classification
+- Develop an energy-based model for key candidate ranking
 
-Evaluate:
+---
 
-Classification accuracy
+### Tools and Technologies
 
-Key rank performance
+- Python
+- PyTorch
+- NumPy
+- HDF5 dataset format
+- Convolutional Neural Networks (CNNs)
 
-Compare classical vs modern cipher robustness against deep learning
+# Energy-Based Cipher Classifier
+
+## Purpose
+
+The energy classifier is used to classify cipher-related patterns and distinguish between different cipher behaviours present in the project. Instead of directly predicting the secret key, the model learns to identify whether a given feature vector corresponds to a valid cipher transformation.
+
+This module acts as the first stage of the pipeline by learning statistical representations of different cipher types and their structural behaviour.
+
+---
+
+## Cipher Types 
+
+The project includes the following cipher categories:
+
+- Advanced Encryption Standards(AES)
+- Classical substitution-based cipher (Vigenère)
+- Lightweight block cipher (SPECK32)
+- Feistel-based block cipher (DES)
+
+Each cipher exhibits distinct statistical and structural patterns. The energy classifier learns to differentiate these patterns.
+
+---
+
+## Theoretical Foundation
+
+An Energy-Based Model defines a scalar function:
+
+E(x, y)
+
+where:
+
+x = input feature vector (trace-derived or text-derived features)  
+y = cipher class label
+
+The model assigns:
+
+Low energy → correct cipher class  
+High energy → incorrect cipher class
+
+---
+
+## Classification Mechanism
+
+During training, the model learns:
+
+- statistical structure of ciphertext or trace features
+- distributional differences between cipher types
+- structural properties of transformations
+
+This enables the classifier to distinguish between:
+
+- classical polyalphabetic behaviour
+- Feistel network leakage patterns
+- ARX-based lightweight cipher leakage
+
+---
+
+## Training Objective
+
+The loss function enforces:
+
+E(x, y_true) < E(x, y_false)
+
+This creates an energy margin between correct and incorrect cipher classes.
+
+---
+
+## Output Interpretation
+
+The model produces an energy score for each cipher type.  
+The predicted class is the one with minimum energy.
+
+This allows:
+
+- multi-class cipher classification
+- statistical validation of cipher behaviour
+- feature learning for downstream cryptanalysis
+
+---
+
+## Role in the Cryptanalysis Pipeline
+
+The energy classifier:
+
+- learns structural differences between cipher families
+- provides feature-level understanding of cipher behaviour
+- acts as a preprocessing and analysis stage before key recovery attacks
+
+# Classical Cryptanalysis: Vigenère Cipher
+
+## Background
+
+The Vigenère cipher is a polyalphabetic substitution cipher defined as:
+
+Ci = (Pi + Ki) mod 26
+
+Its security depends on the secrecy of the key length and key characters.
+
+---
+
+## Key Length Detection
+
+Two statistical techniques are used:
+
+### Index of Coincidence (IC)
+
+The IC measures the probability that two randomly selected letters are identical. English text has a higher IC than random text. By computing IC for different assumed key lengths, the correct key length can be estimated.
+
+### Kasiski Examination
+
+Repeated ciphertext patterns reveal periodic spacing. The greatest common divisor of these spacings provides candidate key lengths.
+
+---
+
+## Frequency Analysis
+
+After determining the key length, the ciphertext is divided into columns. Each column behaves like a Caesar cipher. By comparing letter frequency distributions with English frequencies, the shift for each column is determined and the key is reconstructed.
+
+---
+
+## Outcome
+
+- Successful recovery of the key
+- Demonstration of classical statistical cryptanalysis
+- Baseline comparison for modern machine learning based attacks
+
+# Side-Channel Analysis of DES and SPECK32
+
+## What is Side-Channel Analysis
+
+Side-Channel Analysis (SCA) exploits physical leakage from cryptographic implementations rather than mathematical weaknesses. Power consumption is data-dependent and can reveal information about intermediate computations.
+
+---
+
+## Leakage Model
+
+The Hamming Weight (HW) model is used:
+
+HW(x) = number of bits set to 1 in x
+
+Power consumption is assumed to be proportional to the Hamming Weight of intermediate values.
+
+---
+
+## SPECK32: Synthetic Trace Generation
+
+Synthetic traces are generated by recording HW values of intermediate operations during encryption:
+
+- rotation output
+- modular addition result
+- XOR with round key
+- final mixing stage
+
+Each round produces four leakage samples.
+
+Trace length = 22 × 4 = 88 samples
+
+Dataset characteristics:
+
+- 10,000 traces
+- fixed secret key
+- random plaintexts
+- Gaussian noise added
+- random desynchronization applied
+
+This simulates realistic measurement conditions.
+
+---
+
+## CNN-Based Key Recovery for SPECK32
+
+A Convolutional Neural Network is trained to learn the mapping:
+
+trace → key class
+
+Key rank is used as the evaluation metric.  
+Rank 0 indicates successful key recovery.
+
+---
+
+## DES S-box Side-Channel Attack
+
+Instead of predicting the key directly, the model predicts the S-box output (16 classes).
+
+Key recovery procedure:
+
+1. Compute S-box output for each key hypothesis
+2. Accumulate log-likelihoods across traces
+3. Select the key with maximum likelihood
+
+This follows the template attack methodology with deep learning feature extraction.
+
+---
+
+## Advantages of Deep Learning in SCA
+
+- automatic detection of leakage points
+- robustness to noise and misalignment
+- no manual feature engineering required
