@@ -133,3 +133,8 @@ Generalisation | Cross-device evaluation |
 - NumPy  
 - HDF5  
 - CNN Architectures  
+
+## Mentors  
+
+- Afreen Kazi 
+- Ghruank Kothare  
