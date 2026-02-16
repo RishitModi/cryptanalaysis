@@ -1,7 +1,7 @@
 # Energy-Based and Neurosymbolic Methods for Advanced Cryptanalysis
 
 [Project Repo](https://github.com/AnuushkaY/EnergyBased-and-Neurosymbolic-Methods-for-Advanced-CrypytAnalysis)  
-[Documentation](https://anuushkay.github.io/Cryptanalysis_Documentation/)
+For [Documentation](https://anuushkay.github.io/Cryptanalysis_Documentation/)
 
 ---
 
